@@ -3,8 +3,11 @@
 import csv #Para leer y escribir archivos CSV
 import os  #Para verificar si un archivo existe
 
-#Creamos un valor constatne para el archivo, que no cambia durante todo el programa
-ARCHIVO_CSV = "paises.csv"
+# Obtiene la carpeta donde está guardado este archivo .py
+CARPETA_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+
+# Arma la ruta completa al CSV, siempre relativa a esa carpeta
+ARCHIVO_CSV = os.path.join(CARPETA_SCRIPT, "paises.csv")
 
 #Primero leemos y guardamos el archivo CSV
 def leer_csv():
@@ -13,7 +16,7 @@ def leer_csv():
     #Si el archivo no existe, devuelve una lista vacia
     paises = []      #La lista vacia donde se guardan los paises
 
-    #Verificamos si el archuvo existe
+    #Verificamos si el archivo existe
     if not os.path.exists(ARCHIVO_CSV):
         print("Aviso. No se encontro el archivo. Se empieza con una lista vacia.")
         return paises
@@ -171,42 +174,42 @@ def actualizar_pais(paises):
             pais_encontrado = pais
             break  #El pais fue encontrado, no hace falta seguir
 
-        #Si no se encontro, se avisa y se sale
-        if pais_encontrado is None:
-            print(f"Error. No se encontro el pais '{nombre}'")
-            return
+    #Si no se encontro, se avisa y se sale
+    if pais_encontrado is None:
+        print(f"Error. No se encontro el pais '{nombre}'")
+        return
     
-        #Mostramos los datos actuales
-        print(f"Pais: {pais_encontrado['nombre']}")
-        print(f"Poblacion actual: {pais_encontrado['poblacion']:,}")
-        print(f"Superficie actual: {pais_encontrado['superficie']:,} km²")
-        print(f" (Deje en blanco y presione Enter para no modificar)")
+    #Mostramos los datos actuales
+    print(f"Pais: {pais_encontrado['nombre']}")
+    print(f"Poblacion actual: {pais_encontrado['poblacion']:,}")
+    print(f"Superficie actual: {pais_encontrado['superficie']:,} km²")
+    print(f" (Deje en blanco y presione Enter para no modificar)")
 
-        #Pedir nueva poblacion
-        nueva_pob = input("Nueva poblacion (Enter para mantener): ").strip()
-        if nueva_pob != "" and nueva_pob.lower() != "cancelar":
-            try:
-                valor = int(nueva_pob)
-                if valor < 1:
-                    print("  Advertencia: valor inválido, no se actualizó la población.")
-                else:
-                    pais_encontrado["poblacion"] = valor
-            except ValueError:
-                print("  Advertencia: no es un número, no se actualizó la población.")
+    #Pedir nueva poblacion
+    nueva_pob = input("Nueva poblacion (Enter para mantener): ").strip()
+    if nueva_pob != "" and nueva_pob.lower() != "cancelar":
+        try:
+            valor = int(nueva_pob)
+            if valor < 1:
+                print("  Advertencia: valor inválido, no se actualizó la población.")
+            else:
+                pais_encontrado["poblacion"] = valor
+        except ValueError:
+            print("  Advertencia: no es un número, no se actualizó la población.")
 
-        #Pedir nueva superficie
-        nueva_sup = input("  Nueva superficie en km² (Enter para mantener): ").strip()
-        if nueva_sup != "" and nueva_sup.lower() != "cancelar":
-            try:
-                valor = int(nueva_sup)
-                if valor < 1:
-                    print("  Advertencia: valor inválido, no se actualizó la superficie.")
-                else:
-                    pais_encontrado["superficie"] = valor
-            except ValueError:
-                print("  Advertencia: no es un número, no se actualizó la superficie.")
+    #Pedir nueva superficie
+    nueva_sup = input("  Nueva superficie en km² (Enter para mantener): ").strip()
+    if nueva_sup != "" and nueva_sup.lower() != "cancelar":
+        try:
+            valor = int(nueva_sup)
+            if valor < 1:
+                print("  Advertencia: valor inválido, no se actualizó la superficie.")
+            else:
+                pais_encontrado["superficie"] = valor
+        except ValueError:
+            print("  Advertencia: no es un número, no se actualizó la superficie.")
     
-        print(f"\n  Datos de '{pais_encontrado['nombre']}' actualizados.")
+    print(f"\n  Datos de '{pais_encontrado['nombre']}' actualizados.")
 
 #BUSQUEDA DE PAISES
 def buscar_pais(paises):
@@ -338,7 +341,7 @@ def ordenar_paises(paises):
     print("0. Volver")
 
     opcion = input("Criterio: ").strip()
-    if opcion == 0:
+    if opcion == "0":
         return
     
     #Hacemos las opciones
@@ -428,6 +431,40 @@ def mostrar_estadisticas(paises):
     menor_pob = buscar_menor_poblacion(paises)
     mayor_sup = buscar_mayor_superficie(paises)
     menor_sup = buscar_menor_superficie(paises)
+    
+    # Promedios
+    suma_poblacion = 0
+    for pais in paises:
+        suma_poblacion += pais["poblacion"]
+        promedio_poblacion = suma_poblacion / len(paises)
+
+    suma_superficie = 0
+    for pais in paises:
+        suma_superficie += pais["superficie"]
+        promedio_superficie = suma_superficie / len(paises)
+
+    # Contar por continente
+    contador = {}
+    for pais in paises:
+        continente = pais["continente"]
+        if continente in contador:
+            contador[continente] += 1
+        else:
+            contador[continente] = 1
+
+    # Mostrar todo
+    print(f"\nTotal de paises: {len(paises)}")
+    print(f"\n--- POBLACION ---")
+    print(f"Mayor: {mayor_pob['nombre']} ({mayor_pob['poblacion']:,} hab.)")
+    print(f"Menor: {menor_pob['nombre']} ({menor_pob['poblacion']:,} hab.)")
+    print(f"Promedio: {promedio_poblacion:,.0f} hab.")
+    print(f"\n--- SUPERFICIE ---")
+    print(f"Mayor: {mayor_sup['nombre']} ({mayor_sup['superficie']:,} km²)")
+    print(f"Menor: {menor_sup['nombre']} ({menor_sup['superficie']:,} km²)")
+    print(f"Promedio: {promedio_superficie:,.0f} km²")
+    print(f"\n--- POR CONTINENTE ---")
+    for continente in sorted(contador):
+        print(f"  {continente:<15} {contador[continente]:>3}  {'#' * contador[continente]}")
 
 #MOSTRAR TABLA
 def mostrar_tabla(paises):
