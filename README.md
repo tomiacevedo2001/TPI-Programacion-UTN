@@ -45,11 +45,11 @@ Cada país se representa con la siguiente estructura:
 
 1. Clonar este repositorio:
    ```bash
-   git clone https://github.com/usuario/tp-paises.git
+   git clone https://github.com/tomiacevedo2001/TPI-Programacion-UTN.git
    ```
 2. Entrar a la carpeta del proyecto:
    ```bash
-   cd tp-paises
+   cd TPI-Programacion-UTN
    ```
 3. Ejecutar el programa:
    ```bash
@@ -292,4 +292,5 @@ TPI-Programacion-UTN/
 
 ## Enlaces
 
-- Video demostrativo: [agregar enlace aquí]
+- Video demostrativo: https://drive.google.com/file/d/1ji6AS46nbAGnb2BWGq6NsiXTKqPMQnh5/view?usp=sharing
+- Link Repositorio en GitHub: https://github.com/tomiacevedo2001/TPI-Programacion-UTN
