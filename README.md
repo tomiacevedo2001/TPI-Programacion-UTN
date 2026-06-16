@@ -294,3 +294,4 @@ TPI-Programacion-UTN/
 
 - Video demostrativo: https://drive.google.com/file/d/1ji6AS46nbAGnb2BWGq6NsiXTKqPMQnh5/view?usp=sharing
 - Link Repositorio en GitHub: https://github.com/tomiacevedo2001/TPI-Programacion-UTN
+- Link Archivo PDF: https://drive.google.com/file/d/1tZOdbIk_8fTOKOzIrZHV7DSmxxg3DiZ3/view?usp=sharing
