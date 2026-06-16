@@ -1,4 +1,11 @@
-#Gestion_paises
+#=====================================================
+#Sistema de Gestión de Países
+#Programación 1 - Trabajo Práctico
+#=====================================================
+#Integrantes: [Tomas Ignacio Acevedo Peña] / [Gabriel Alfredo Brizuela Jimenez]
+#Año: 2026
+# =====================================================
+
 # Importamos la librería para manejar archivos CSV
 import csv #Para leer y escribir archivos CSV
 import os  #Para verificar si un archivo existe
@@ -23,7 +30,7 @@ def leer_csv():
     
     #Abrimos el archivo en modo lectura
     with open(ARCHIVO_CSV, newline="", encoding="utf-8") as archivo:
-        lector = csv.DictReader(archivo)   # Lee fila → diccionario automáticamente
+        lector = csv.DictReader(archivo)   # Lee fila del diccionario automáticamente
 
         numero_fila = 2   # Empezamos en 2 porque la fila 1 es el encabezado
         for fila in lector:
@@ -38,19 +45,18 @@ def leer_csv():
 def convertir_fila(fila, numero_fila):
     #Toma una fila del CSV (como diccionario de texto) y la convierte a un diccionario con los tipos correctos (int para números).
     #Devuelve None si algo está mal en esa fila.
-    
-    # Obtener cada campo y quitarle espacios en blanco
-    nombre     = fila.get("nombre", "").strip()
-    poblacion  = fila.get("poblacion", "").strip()
-    superficie = fila.get("superficie", "").strip()
-    continente = fila.get("continente", "").strip()
+    # Obtiene cada campo y quita espacios en blanco
+    nombre     = fila.get("nombre" or "").strip()
+    poblacion  = fila.get("poblacion" or "").strip()
+    superficie = fila.get("superficie" or "").strip()
+    continente = fila.get("continente" or "").strip()
 
-    # Verificar que ningún campo esté vacío
+    # Verifica que ningún campo esté vacío
     if nombre == "" or poblacion == "" or superficie == "" or continente == "":
         print(f"  Advertencia - Fila {numero_fila}: tiene campos vacíos, se omite.")
         return None
 
-    # Intentar convertir población y superficie a números enteros
+    # Intenta convertir población y superficie a números enteros
     try:
         poblacion_numero  = int(poblacion)
         superficie_numero = int(superficie)
@@ -63,7 +69,7 @@ def convertir_fila(fila, numero_fila):
         print(f"  Advertencia - Fila {numero_fila}: valores deben ser mayores a 0, se omite.")
         return None
 
-    # Si todo está bien, devolver el diccionario del país
+    # Si todo está bien, devuelve el diccionario del país
     return {
         "nombre":     nombre,
         "poblacion":  poblacion_numero,
@@ -82,7 +88,7 @@ def guardar_csv(paises):
 
 #ENTRADA DE DATOS DEL USUARIO Y VALIDACIONES
 def pedir_numero(mensaje, minimo=0):
-    #Se le pide un numero entero al usuario. Sigue preguntadno hasta que se ingrese algo valido
+    #Se le pide un numero entero al usuario. Sigue preguntando hasta que se ingrese algo valido
     #El usuario puede escribir cancelar si lo desea, en este caso devuelve el numero puesto o none
     while True:
         entrada = input(mensaje).strip()
@@ -123,14 +129,14 @@ def nombre_ya_existe(paises, nombre):
 #FUNCIONES DE OPERACIONES CON PAISES
 def agregar_pais(paises):
     #Se le pide al usuario los datos de un nuevo pais y lo agrega a la lista
-    #No se permieten nombres duplicados ni vacios
+    #No se permiten nombres duplicados ni vacios
     print("AGREGAR PAIS (escriba cancelar para volver)")
 
     nombre = pedir_texto("Nombre del pais: ")
     if nombre is None:
         return #El usuario cancelo
     
-    #Verificacmos si el nombre ya existe
+    #Verificamos si el nombre ya existe
     if nombre_ya_existe(paises, nombre):
         print(f"Error. El pais {nombre} ya esta en la lista.")
         return
@@ -397,6 +403,11 @@ def mostrar_estadisticas(paises):
     #Promedio de poblacion y superficie
     #Cantidad de paises por continente
     print("ESTADISTICAS")
+
+    if len(paises) == 0:
+        #Validamos que si la lista de paises esta vacia, que no se puedan calcular las estadisticas.
+        print("No hay paises registrados. No se pueden calcular estadisticas.")
+        return
 
     def buscar_mayor_poblacion(paises):
         mayor = paises[0]           # empezamos asumiendo que el primero es el mayor
